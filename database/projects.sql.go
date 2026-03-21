@@ -254,6 +254,22 @@ func (q *Queries) UpdateProjectInfrastructure(ctx context.Context, arg UpdatePro
 	return i, err
 }
 
+const updateProjectJwtSecret = `-- name: UpdateProjectJwtSecret :exec
+UPDATE project
+SET jwt_secret = $1, updated_at = now()
+WHERE project_ref = $2
+`
+
+type UpdateProjectJwtSecretParams struct {
+	JwtSecret  string
+	ProjectRef string
+}
+
+func (q *Queries) UpdateProjectJwtSecret(ctx context.Context, arg UpdateProjectJwtSecretParams) error {
+	_, err := q.db.Exec(ctx, updateProjectJwtSecret, arg.JwtSecret, arg.ProjectRef)
+	return err
+}
+
 const updateProjectStatus = `-- name: UpdateProjectStatus :one
 UPDATE project
 SET status = $2, updated_at = now()

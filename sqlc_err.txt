@@ -1,0 +1,2 @@
+# package database
+queries\organizations.sql:10:12: column "public_id" does not exist

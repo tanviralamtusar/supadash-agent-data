@@ -1,20 +1,19 @@
 module supadash
 
-go 1.24.0
-
-toolchain go1.24.10
+go 1.25.0
 
 require (
 	github.com/docker/docker v24.0.7+incompatible
 	github.com/gin-contrib/cors v1.7.2
 	github.com/gin-gonic/gin v1.10.0
 	github.com/golang-jwt/jwt/v5 v5.2.1
-	github.com/google/uuid v1.6.0
 	github.com/jackc/pgx/v5 v5.6.0
 	github.com/joho/godotenv v1.5.1
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/matthewhartstonge/argon2 v1.0.0
+	github.com/stretchr/testify v1.11.1
 	github.com/trustelem/zxcvbn v1.0.1
+	golang.org/x/time v0.15.0
 )
 
 require (
@@ -23,6 +22,7 @@ require (
 	github.com/bytedance/sonic/loader v0.1.1 // indirect
 	github.com/cloudwego/base64x v0.1.4 // indirect
 	github.com/cloudwego/iasm v0.2.0 // indirect
+	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/distribution/reference v0.5.0 // indirect
 	github.com/dlclark/regexp2 v1.11.0 // indirect
 	github.com/docker/distribution v2.8.3+incompatible // indirect
@@ -52,6 +52,7 @@ require (
 	github.com/opencontainers/image-spec v1.1.1 // indirect
 	github.com/pelletier/go-toml/v2 v2.2.2 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
+	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/rogpeppe/go-internal v1.12.0 // indirect
 	github.com/test-go/testify v1.1.4 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
@@ -62,7 +63,6 @@ require (
 	golang.org/x/sync v0.7.0 // indirect
 	golang.org/x/sys v0.21.0 // indirect
 	golang.org/x/text v0.16.0 // indirect
-	golang.org/x/time v0.14.0 // indirect
 	google.golang.org/protobuf v1.34.2 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	gotest.tools/v3 v3.4.0 // indirect

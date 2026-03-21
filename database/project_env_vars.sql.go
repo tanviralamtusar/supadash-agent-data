@@ -2,19 +2,7 @@ package database
 
 import (
 	"context"
-
-	"github.com/jackc/pgx/v5/pgtype"
 )
-
-type ProjectEnvVar struct {
-	ID         int32
-	ProjectRef string
-	Key        string
-	Value      string
-	IsSecret   bool
-	CreatedAt  pgtype.Timestamptz
-	UpdatedAt  pgtype.Timestamptz
-}
 
 const getProjectEnvVars = `
 SELECT id, project_ref, key, value, is_secret, created_at, updated_at

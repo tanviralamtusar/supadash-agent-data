@@ -43,3 +43,8 @@ ORDER BY created_at DESC;
 -- name: DeleteProject :exec
 DELETE FROM project
 WHERE project_ref = $1;
+
+-- name: UpdateProjectJwtSecret :exec
+UPDATE project
+SET jwt_secret = $1, updated_at = now()
+WHERE project_ref = $2;

@@ -1,0 +1,12 @@
+# supadash/provisioner
+provisioner\collector.go:214:5: invalid operation: totalMem += s.MemoryUsageBytes (mismatched types int64 and pgtype.Int8)
+provisioner\collector.go:215:29: invalid operation: s.MemoryUsageBytes > maxMem (mismatched types pgtype.Int8 and int64)
+provisioner\collector.go:216:15: cannot use s.MemoryUsageBytes (variable of struct type pgtype.Int8) as int64 value in assignment
+provisioner\collector.go:218:19: s.CPUUsagePercent undefined (type database.ResourceSnapshot has no field or method CPUUsagePercent, but does have field CpuUsagePercent)
+provisioner\collector.go:219:10: s.CPUUsagePercent undefined (type database.ResourceSnapshot has no field or method CPUUsagePercent, but does have field CpuUsagePercent)
+provisioner\collector.go:220:17: s.CPUUsagePercent undefined (type database.ResourceSnapshot has no field or method CPUUsagePercent, but does have field CpuUsagePercent)
+provisioner\collector.go:222:5: invalid operation: totalDiskR += s.DiskReadBytes (mismatched types int64 and pgtype.Int8)
+provisioner\collector.go:223:5: invalid operation: totalDiskW += s.DiskWriteBytes (mismatched types int64 and pgtype.Int8)
+provisioner\collector.go:224:5: invalid operation: totalNetRx += s.NetworkRxBytes (mismatched types int64 and pgtype.Int8)
+provisioner\collector.go:225:5: invalid operation: totalNetTx += s.NetworkTxBytes (mismatched types int64 and pgtype.Int8)
+provisioner\collector.go:225:5: too many errors

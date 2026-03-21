@@ -12,12 +12,12 @@ func main() {
 	logger.Info("Loading config...")
 	config, err := conf.LoadConfig(".env")
 	if err != nil {
-		logger.Error("Failed to load configuration, ensure the required environment variables are set.")
+		logger.Error("Failed to load configuration, ensure the required environment variables are set.", "error", err)
 		return
 	}
 	apiInstance, err := api.CreateApi(logger, config)
 	if err != nil {
-		logger.Error("Failed to start API state. ", err.Error())
+		logger.Error("Failed to start API state.", "error", err)
 		return
 	}
 

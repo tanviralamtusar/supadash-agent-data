@@ -37,6 +37,8 @@ type Config struct {
 	Domain            DomainSettings       `json:"domain" required:"true"`
 	Postgres          PostgresSettings     `json:"postgres" required:"true"`
 	Provisioning      ProvisioningSettings `json:"provisioning"`
+	AllowedOrigins    []string             `json:"allowed_origins" split_words:"true" default:"*"`
+	RateLimitRequests int                  `json:"rate_limit_requests" split_words:"true" default:"100"`
 }
 
 func LoadConfig(filename string) (*Config, error) {

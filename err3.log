@@ -1,0 +1,5 @@
+# supadash/api
+api\team.go:25:24: a.queries.GetOrganizationBySlug undefined (type *database.Queries has no field or method GetOrganizationBySlug)
+api\team.go:56:24: a.queries.GetOrganizationBySlug undefined (type *database.Queries has no field or method GetOrganizationBySlug)
+api\team.go:107:24: a.queries.GetOrganizationBySlug undefined (type *database.Queries has no field or method GetOrganizationBySlug)
+api\team.go:135:24: a.queries.GetOrganizationBySlug undefined (type *database.Queries has no field or method GetOrganizationBySlug)

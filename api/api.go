@@ -152,13 +152,23 @@ const INDEX = ""
 func (a *Api) Router() *gin.Engine {
 	r := gin.Default()
 
+	// Construct allowed CORS origins
+	allowedOrigins := a.config.AllowedOrigins
+	if len(allowedOrigins) == 0 {
+		allowedOrigins = []string{"*"}
+	}
+
 	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"*"},
-		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE"},
-		AllowHeaders:     []string{"*"},
+		AllowOrigins:     allowedOrigins,
+		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Authorization", "Content-Type", "Accept"},
+		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
 		MaxAge:           12 * time.Hour,
 	}))
+
+	// Apply Rate Limiting globally (burst is 2x limit)
+	r.Use(RateLimitMiddleware(float64(a.config.RateLimitRequests), a.config.RateLimitRequests*2))
 
 	r.GET("/", a.index)
 	r.GET("/status", a.status)
@@ -175,10 +185,20 @@ func (a *Api) Router() *gin.Engine {
 		organization.GET(INDEX, a.getOrganizations)
 
 		specificOrganization := organization.Group("/:slug")
+		specificOrganization.Use(a.RequireOrgRole("owner", "admin", "member", "viewer"))
 		{
 			members := specificOrganization.Group("/members")
 			{
 				members.GET("/reached-free-project-limit", a.getOrganizationMembersReachedFreeProjectLimit)
+			}
+			
+			// Team Management
+			team := specificOrganization.Group("/team")
+			{
+				team.GET(INDEX, a.getTeamMembers)
+				team.POST("/invite", a.RequireOrgRole("owner", "admin"), a.inviteTeamMember)
+				team.PUT("/:id", a.RequireOrgRole("owner", "admin"), a.updateTeamMemberRole)
+				team.DELETE("/:id", a.RequireOrgRole("owner", "admin"), a.removeTeamMember)
 			}
 		}
 	}
@@ -193,17 +213,24 @@ func (a *Api) Router() *gin.Engine {
 			specificProject.GET("/upgrade/status", a.getProjectUpgradeStatus)
 			specificProject.GET("/health", a.getProjectHealth)
 			specificProject.GET("/supervisor", a.getProjectSupervisor)
-			specificProject.POST("/pause", a.postProjectPause)
-			specificProject.POST("/resume", a.postProjectResume)
-			specificProject.DELETE(INDEX, a.deleteProject)
+			
+			specificProject.POST("/pause", a.RequireProjectRole("owner", "admin"), a.postProjectPause)
+			specificProject.POST("/resume", a.RequireProjectRole("owner", "admin"), a.postProjectResume)
+			specificProject.DELETE(INDEX, a.RequireProjectRole("owner"), a.deleteProject)
 
 			// Env var management
-			specificProject.GET("/env", a.getProjectEnvVars)
-			specificProject.PUT("/env", a.putProjectEnvVars)
+			specificProject.GET("/env", a.RequireProjectRole("owner", "admin", "member", "viewer"), a.getProjectEnvVars)
+			specificProject.PUT("/env", a.RequireProjectRole("owner", "admin"), a.putProjectEnvVars)
 
 			// Resource management
-			specificProject.GET("/resources", a.getProjectResources)
-			specificProject.PUT("/resources", a.putProjectResources)
+			specificProject.GET("/resources", a.RequireProjectRole("owner", "admin", "member", "viewer"), a.getProjectResources)
+			specificProject.PUT("/resources", a.RequireProjectRole("owner", "admin"), a.putProjectResources)
+
+			// Secrets management
+			specificProject.POST("/secrets/rotate", a.RequireProjectRole("owner", "admin"), a.rotateProjectSecret)
+
+			// Audit Logs
+			specificProject.GET("/audit", a.RequireProjectRole("owner", "admin", "member", "viewer"), a.getProjectAuditLogs)
 
 			// Analysis
 			specificProject.GET("/analysis", a.getProjectAnalysis)
@@ -332,6 +359,12 @@ func (a *Api) Router() *gin.Engine {
 
 	v1 := r.Group("/v1")
 	{
+		auth := v1.Group("/auth")
+		{
+			auth.POST("/token", a.postAuthToken)
+			auth.POST("/logout", a.postAuthLogout)
+		}
+
 		v1Projects := v1.Group("/projects")
 		{
 			specificProject := v1Projects.Group("/:ref")

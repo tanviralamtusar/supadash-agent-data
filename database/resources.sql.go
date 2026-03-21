@@ -3,25 +3,9 @@ package database
 import (
 	"context"
 	"time"
-
-	"github.com/jackc/pgx/v5/pgtype"
 )
 
 // --- Project Resources ---
-
-type ProjectResource struct {
-	ID                 int32
-	ProjectRef         string
-	Plan               string
-	CPULimit           float64
-	CPUReservation     float64
-	MemoryLimit        int64
-	MemoryReservation  int64
-	BurstEligible      bool
-	BurstPriority      int32
-	CreatedAt          pgtype.Timestamptz
-	UpdatedAt          pgtype.Timestamptz
-}
 
 const getProjectResources = `
 SELECT id, project_ref, plan, cpu_limit, cpu_reservation, memory_limit, memory_reservation,
@@ -33,7 +17,7 @@ func (q *Queries) GetProjectResources(ctx context.Context, projectRef string) (P
 	row := q.db.QueryRow(ctx, getProjectResources, projectRef)
 	var r ProjectResource
 	err := row.Scan(
-		&r.ID, &r.ProjectRef, &r.Plan, &r.CPULimit, &r.CPUReservation,
+		&r.ID, &r.ProjectRef, &r.Plan, &r.CpuLimit, &r.CpuReservation,
 		&r.MemoryLimit, &r.MemoryReservation, &r.BurstEligible, &r.BurstPriority,
 		&r.CreatedAt, &r.UpdatedAt,
 	)
@@ -67,7 +51,7 @@ func (q *Queries) UpsertProjectResources(ctx context.Context, arg UpsertProjectR
 	)
 	var r ProjectResource
 	err := row.Scan(
-		&r.ID, &r.ProjectRef, &r.Plan, &r.CPULimit, &r.CPUReservation,
+		&r.ID, &r.ProjectRef, &r.Plan, &r.CpuLimit, &r.CpuReservation,
 		&r.MemoryLimit, &r.MemoryReservation, &r.BurstEligible, &r.BurstPriority,
 		&r.CreatedAt, &r.UpdatedAt,
 	)
@@ -90,7 +74,7 @@ func (q *Queries) GetAllProjectResources(ctx context.Context) ([]ProjectResource
 	for rows.Next() {
 		var r ProjectResource
 		if err := rows.Scan(
-			&r.ID, &r.ProjectRef, &r.Plan, &r.CPULimit, &r.CPUReservation,
+			&r.ID, &r.ProjectRef, &r.Plan, &r.CpuLimit, &r.CpuReservation,
 			&r.MemoryLimit, &r.MemoryReservation, &r.BurstEligible, &r.BurstPriority,
 			&r.CreatedAt, &r.UpdatedAt,
 		); err != nil {
@@ -102,24 +86,6 @@ func (q *Queries) GetAllProjectResources(ctx context.Context) ([]ProjectResource
 }
 
 // --- Resource Snapshots ---
-
-type ResourceSnapshot struct {
-	ID               int64
-	ProjectRef       string
-	ServiceName      string
-	MemoryUsageBytes int64
-	MemoryLimitBytes int64
-	CPUUsagePercent  float64
-	CPULimitCores    float64
-	DiskReadBytes    int64
-	DiskWriteBytes   int64
-	NetworkRxBytes   int64
-	NetworkTxBytes   int64
-	ContainerStatus  string
-	RestartCount     int32
-	OOMKilled        bool
-	RecordedAt       time.Time
-}
 
 const insertResourceSnapshot = `
 INSERT INTO resource_snapshots (project_ref, service_name, memory_usage_bytes, memory_limit_bytes,
@@ -173,8 +139,8 @@ func (q *Queries) GetRecentSnapshots(ctx context.Context, projectRef string, sin
 		var s ResourceSnapshot
 		if err := rows.Scan(
 			&s.ID, &s.ProjectRef, &s.ServiceName, &s.MemoryUsageBytes, &s.MemoryLimitBytes,
-			&s.CPUUsagePercent, &s.CPULimitCores, &s.DiskReadBytes, &s.DiskWriteBytes,
-			&s.NetworkRxBytes, &s.NetworkTxBytes, &s.ContainerStatus, &s.RestartCount, &s.OOMKilled, &s.RecordedAt,
+			&s.CpuUsagePercent, &s.CpuLimitCores, &s.DiskReadBytes, &s.DiskWriteBytes,
+			&s.NetworkRxBytes, &s.NetworkTxBytes, &s.ContainerStatus, &s.RestartCount, &s.OomKilled, &s.RecordedAt,
 		); err != nil {
 			return nil, err
 		}
@@ -291,19 +257,6 @@ func (q *Queries) GetHourlySnapshots(ctx context.Context, projectRef string, sin
 
 // --- Recommendations ---
 
-type ResourceRecommendation struct {
-	ID                int32
-	ProjectRef        string
-	Type              string
-	Severity          string
-	Title             string
-	Description       string
-	PotentialSavingsMB int32
-	IsDismissed       bool
-	CreatedAt         pgtype.Timestamptz
-	DismissedAt       pgtype.Timestamptz
-}
-
 const getActiveRecommendations = `
 SELECT id, project_ref, type, severity, title, description, potential_savings_mb,
        is_dismissed, created_at, dismissed_at
@@ -323,7 +276,7 @@ func (q *Queries) GetActiveRecommendations(ctx context.Context, projectRef strin
 		var r ResourceRecommendation
 		if err := rows.Scan(
 			&r.ID, &r.ProjectRef, &r.Type, &r.Severity, &r.Title, &r.Description,
-			&r.PotentialSavingsMB, &r.IsDismissed, &r.CreatedAt, &r.DismissedAt,
+			&r.PotentialSavingsMb, &r.IsDismissed, &r.CreatedAt, &r.DismissedAt,
 		); err != nil {
 			return nil, err
 		}

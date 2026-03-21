@@ -1,0 +1,2 @@
+# supadash
+.\main.go:20:3: call to slog.Logger.Error missing a final value

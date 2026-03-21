@@ -10,8 +10,15 @@ import (
 	"strings"
 	"time"
 
+	"github.com/jackc/pgx/v5/pgtype"
 	"supadash/database"
 )
+
+func floatToNumeric(f float64) pgtype.Numeric {
+	var n pgtype.Numeric
+	n.Scan(fmt.Sprintf("%f", f))
+	return n
+}
 
 // AnalysisCollector runs background goroutines to collect container stats
 type AnalysisCollector struct {
@@ -211,22 +218,23 @@ func (ac *AnalysisCollector) aggregateHourly(ctx context.Context) {
 			var oomCount, restartCount int32
 
 			for _, s := range snaps {
-				totalMem += s.MemoryUsageBytes
-				if s.MemoryUsageBytes > maxMem {
-					maxMem = s.MemoryUsageBytes
+				totalMem += s.MemoryUsageBytes.Int64
+				if s.MemoryUsageBytes.Int64 > maxMem {
+					maxMem = s.MemoryUsageBytes.Int64
 				}
-				totalCPU += s.CPUUsagePercent
-				if s.CPUUsagePercent > maxCPU {
-					maxCPU = s.CPUUsagePercent
+				cpuPerc, _ := s.CpuUsagePercent.Float64Value()
+				totalCPU += cpuPerc.Float64
+				if cpuPerc.Float64 > maxCPU {
+					maxCPU = cpuPerc.Float64
 				}
-				totalDiskR += s.DiskReadBytes
-				totalDiskW += s.DiskWriteBytes
-				totalNetRx += s.NetworkRxBytes
-				totalNetTx += s.NetworkTxBytes
-				if s.OOMKilled {
+				totalDiskR += s.DiskReadBytes.Int64
+				totalDiskW += s.DiskWriteBytes.Int64
+				totalNetRx += s.NetworkRxBytes.Int64
+				totalNetTx += s.NetworkTxBytes.Int64
+				if s.OomKilled.Bool {
 					oomCount++
 				}
-				restartCount += s.RestartCount
+				restartCount += s.RestartCount.Int32
 			}
 
 			count := int64(len(snaps))

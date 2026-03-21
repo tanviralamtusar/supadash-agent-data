@@ -1,0 +1,89 @@
+	supadash		coverage: 0.0% of statements
+=== RUN   TestRateLimitMiddleware
+=== RUN   TestRateLimitMiddleware/allows_requests_under_limit
+=== RUN   TestRateLimitMiddleware/blocks_requests_over_limit
+=== RUN   TestRateLimitMiddleware/different_IPs_have_separate_limits
+--- PASS: TestRateLimitMiddleware (0.00s)
+    --- PASS: TestRateLimitMiddleware/allows_requests_under_limit (0.00s)
+    --- PASS: TestRateLimitMiddleware/blocks_requests_over_limit (0.00s)
+    --- PASS: TestRateLimitMiddleware/different_IPs_have_separate_limits (0.00s)
+=== RUN   TestRateLimiterEntry
+=== RUN   TestRateLimiterEntry/creates_limiter_for_new_IP
+=== RUN   TestRateLimiterEntry/returns_same_limiter_for_same_IP
+=== RUN   TestRateLimiterEntry/returns_different_limiters_for_different_IPs
+--- PASS: TestRateLimiterEntry (0.00s)
+    --- PASS: TestRateLimiterEntry/creates_limiter_for_new_IP (0.00s)
+    --- PASS: TestRateLimiterEntry/returns_same_limiter_for_same_IP (0.00s)
+    --- PASS: TestRateLimiterEntry/returns_different_limiters_for_different_IPs (0.00s)
+PASS
+coverage: 1.9% of statements
+ok  	supadash/api	0.248s	coverage: 1.9% of statements
+	supadash/conf		coverage: 0.0% of statements
+	supadash/database		coverage: 0.0% of statements
+	supadash/permissions		coverage: 0.0% of statements
+=== RUN   TestNewPortAllocator
+--- PASS: TestNewPortAllocator (0.00s)
+=== RUN   TestAllocatePorts
+=== RUN   TestAllocatePorts/returns_valid_allocation
+=== RUN   TestAllocatePorts/two_projects_get_different_ports
+--- PASS: TestAllocatePorts (0.01s)
+    --- PASS: TestAllocatePorts/returns_valid_allocation (0.01s)
+    --- PASS: TestAllocatePorts/two_projects_get_different_ports (0.01s)
+=== RUN   TestReleasePorts
+--- PASS: TestReleasePorts (0.00s)
+=== RUN   TestRegisterExistingPorts
+--- PASS: TestRegisterExistingPorts (0.00s)
+=== RUN   TestGenerateRandomString
+=== RUN   TestGenerateRandomString/returns_correct_length
+=== RUN   TestGenerateRandomString/returns_hex_characters_only
+=== RUN   TestGenerateRandomString/returns_unique_values
+=== RUN   TestGenerateRandomString/handles_small_length
+--- PASS: TestGenerateRandomString (0.00s)
+    --- PASS: TestGenerateRandomString/returns_correct_length (0.00s)
+    --- PASS: TestGenerateRandomString/returns_hex_characters_only (0.00s)
+    --- PASS: TestGenerateRandomString/returns_unique_values (0.00s)
+    --- PASS: TestGenerateRandomString/handles_small_length (0.00s)
+=== RUN   TestGenerateRandomBase64
+=== RUN   TestGenerateRandomBase64/returns_non-empty_string
+=== RUN   TestGenerateRandomBase64/returns_URL-safe_base64
+=== RUN   TestGenerateRandomBase64/returns_unique_values
+--- PASS: TestGenerateRandomBase64 (0.00s)
+    --- PASS: TestGenerateRandomBase64/returns_non-empty_string (0.00s)
+    --- PASS: TestGenerateRandomBase64/returns_URL-safe_base64 (0.00s)
+    --- PASS: TestGenerateRandomBase64/returns_unique_values (0.00s)
+=== RUN   TestGenerateJWT
+=== RUN   TestGenerateJWT/generates_valid_HS256_token
+=== RUN   TestGenerateJWT/contains_correct_claims
+=== RUN   TestGenerateJWT/fails_with_wrong_secret
+--- PASS: TestGenerateJWT (0.00s)
+    --- PASS: TestGenerateJWT/generates_valid_HS256_token (0.00s)
+    --- PASS: TestGenerateJWT/contains_correct_claims (0.00s)
+    --- PASS: TestGenerateJWT/fails_with_wrong_secret (0.00s)
+=== RUN   TestGenerateProjectSecrets
+=== RUN   TestGenerateProjectSecrets/all_fields_non-empty
+=== RUN   TestGenerateProjectSecrets/AnonKey_is_valid_JWT_signed_by_JWTSecret
+=== RUN   TestGenerateProjectSecrets/ServiceKey_is_valid_JWT_with_service_role
+=== RUN   TestGenerateProjectSecrets/two_calls_produce_different_secrets
+--- PASS: TestGenerateProjectSecrets (0.00s)
+    --- PASS: TestGenerateProjectSecrets/all_fields_non-empty (0.00s)
+    --- PASS: TestGenerateProjectSecrets/AnonKey_is_valid_JWT_signed_by_JWTSecret (0.00s)
+    --- PASS: TestGenerateProjectSecrets/ServiceKey_is_valid_JWT_with_service_role (0.00s)
+    --- PASS: TestGenerateProjectSecrets/two_calls_produce_different_secrets (0.00s)
+PASS
+coverage: 10.0% of statements
+ok  	supadash/provisioner	0.824s	coverage: 10.0% of statements
+=== RUN   TestGenerateProjectRef
+=== RUN   TestGenerateProjectRef/basic_format_slug-6hex
+=== RUN   TestGenerateProjectRef/special_characters_stripped
+=== RUN   TestGenerateProjectRef/long_name_truncated
+=== RUN   TestGenerateProjectRef/uniqueness
+=== RUN   TestGenerateProjectRef/empty_slug_handled
+--- PASS: TestGenerateProjectRef (0.00s)
+    --- PASS: TestGenerateProjectRef/basic_format_slug-6hex (0.00s)
+    --- PASS: TestGenerateProjectRef/special_characters_stripped (0.00s)
+    --- PASS: TestGenerateProjectRef/long_name_truncated (0.00s)
+    --- PASS: TestGenerateProjectRef/uniqueness (0.00s)
+    --- PASS: TestGenerateProjectRef/empty_slug_handled (0.00s)
+PASS
+coverage: 76.9% of statements
+ok  	supadash/utils	0.683s	coverage: 76.9% of statements

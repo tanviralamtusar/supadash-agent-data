@@ -20,6 +20,17 @@ type Account struct {
 	UpdatedAt    pgtype.Timestamptz
 }
 
+type AuditLog struct {
+	ID            int32
+	TargetProject pgtype.Text
+	ActorID       int32
+	Action        string
+	IpAddress     pgtype.Text
+	UserAgent     pgtype.Text
+	Details       []byte
+	CreatedAt     pgtype.Timestamptz
+}
+
 type Migration struct {
 	ID        string
 	Note      pgtype.Text
@@ -61,4 +72,88 @@ type Project struct {
 	AnonKey           pgtype.Text
 	ServiceRoleKey    pgtype.Text
 	ProvisionedAt     pgtype.Timestamptz
+}
+
+type ProjectEnvVar struct {
+	ID         int32
+	ProjectRef string
+	Key        string
+	Value      string
+	IsSecret   bool
+	CreatedAt  pgtype.Timestamptz
+	UpdatedAt  pgtype.Timestamptz
+}
+
+type ProjectResource struct {
+	ID                int32
+	ProjectRef        string
+	Plan              string
+	CpuLimit          pgtype.Numeric
+	CpuReservation    pgtype.Numeric
+	MemoryLimit       int64
+	MemoryReservation int64
+	BurstEligible     bool
+	BurstPriority     int32
+	CreatedAt         pgtype.Timestamptz
+	UpdatedAt         pgtype.Timestamptz
+}
+
+type RefreshToken struct {
+	ID        int32
+	AccountID int32
+	Token     string
+	ExpiresAt pgtype.Timestamptz
+	Revoked   bool
+	CreatedAt pgtype.Timestamptz
+	UpdatedAt pgtype.Timestamptz
+}
+
+type ResourceRecommendation struct {
+	ID                 int32
+	ProjectRef         string
+	Type               string
+	Severity           string
+	Title              string
+	Description        string
+	PotentialSavingsMb pgtype.Int4
+	IsDismissed        pgtype.Bool
+	CreatedAt          pgtype.Timestamptz
+	DismissedAt        pgtype.Timestamptz
+}
+
+type ResourceSnapshot struct {
+	ID               int64
+	ProjectRef       string
+	ServiceName      string
+	MemoryUsageBytes pgtype.Int8
+	MemoryLimitBytes pgtype.Int8
+	CpuUsagePercent  pgtype.Numeric
+	CpuLimitCores    pgtype.Numeric
+	DiskReadBytes    pgtype.Int8
+	DiskWriteBytes   pgtype.Int8
+	NetworkRxBytes   pgtype.Int8
+	NetworkTxBytes   pgtype.Int8
+	ContainerStatus  pgtype.Text
+	RestartCount     pgtype.Int4
+	OomKilled        pgtype.Bool
+	RecordedAt       pgtype.Timestamptz
+}
+
+type ResourceSnapshotsHourly struct {
+	ID                   int64
+	ProjectRef           string
+	ServiceName          string
+	Hour                 pgtype.Timestamptz
+	AvgMemoryUsageBytes  pgtype.Int8
+	MaxMemoryUsageBytes  pgtype.Int8
+	AvgCpuPercent        pgtype.Numeric
+	MaxCpuPercent        pgtype.Numeric
+	TotalDiskReadBytes   pgtype.Int8
+	TotalDiskWriteBytes  pgtype.Int8
+	TotalNetworkRxBytes  pgtype.Int8
+	TotalNetworkTxBytes  pgtype.Int8
+	BurstPoolUsageBytes  pgtype.Int8
+	BurstPoolDurationSec pgtype.Int4
+	OomKillCount         pgtype.Int4
+	RestartCount         pgtype.Int4
 }

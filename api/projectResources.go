@@ -55,11 +55,14 @@ func (a *Api) getProjectResources(c *gin.Context) {
 		return
 	}
 
+	cpuLimitVal, _ := res.CpuLimit.Float64Value()
+	cpuReservationVal, _ := res.CpuReservation.Float64Value()
+
 	c.JSON(http.StatusOK, ResourcesResponse{
 		ProjectRef:     res.ProjectRef,
 		Plan:           res.Plan,
-		CPULimit:       res.CPULimit,
-		CPUReservation: res.CPUReservation,
+		CPULimit:       cpuLimitVal.Float64,
+		CPUReservation: cpuReservationVal.Float64,
 		MemoryLimitMB:  res.MemoryLimit / (1024 * 1024),
 		MemoryReservMB: res.MemoryReservation / (1024 * 1024),
 		BurstEligible:  res.BurstEligible,
@@ -131,11 +134,14 @@ func (a *Api) putProjectResources(c *gin.Context) {
 		}()
 	}
 
+	cpuLimitVal, _ := res.CpuLimit.Float64Value()
+	cpuReservationVal, _ := res.CpuReservation.Float64Value()
+
 	c.JSON(http.StatusOK, ResourcesResponse{
 		ProjectRef:     res.ProjectRef,
 		Plan:           res.Plan,
-		CPULimit:       res.CPULimit,
-		CPUReservation: res.CPUReservation,
+		CPULimit:       cpuLimitVal.Float64,
+		CPUReservation: cpuReservationVal.Float64,
 		MemoryLimitMB:  res.MemoryLimit / (1024 * 1024),
 		MemoryReservMB: res.MemoryReservation / (1024 * 1024),
 		BurstEligible:  res.BurstEligible,
