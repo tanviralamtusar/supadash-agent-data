@@ -42,11 +42,14 @@ type Config struct {
 }
 
 func LoadConfig(filename string) (*Config, error) {
-	if _, err := os.Stat("./.env"); !os.IsNotExist(err) {
-		if err := loadEnvironment(filename); err != nil {
-			return nil, err
-		}
+	// Try to load .env file if it exists, but don't fail if it doesn't.
+	// Production environments (like Coolify/Docker) pass env vars directly.
+	if filename != "" {
+		_ = godotenv.Load(filename)
+	} else {
+		_ = godotenv.Load()
 	}
+
 	config := new(Config)
 	if err := envconfig.Process("", config); err != nil {
 		return nil, err
@@ -54,16 +57,4 @@ func LoadConfig(filename string) (*Config, error) {
 	return config, nil
 }
 
-func loadEnvironment(filename string) error {
-	var err error
-	if filename != "" {
-		err = godotenv.Load(filename)
-	} else {
-		err = godotenv.Load()
-		// handle if .env file does not exist, this is OK
-		if os.IsNotExist(err) {
-			return nil
-		}
-	}
-	return err
-}
+
