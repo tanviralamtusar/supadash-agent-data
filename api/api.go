@@ -359,6 +359,10 @@ func (a *Api) Router() *gin.Engine {
 
 	v1 := r.Group("/v1")
 	{
+		// Monitoring (no auth)
+		v1.GET("/health", a.status)
+		v1.GET("/metrics", a.getMetrics)
+
 		auth := v1.Group("/auth")
 		{
 			auth.POST("/token", a.postAuthToken)

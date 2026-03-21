@@ -1,34 +1,31 @@
 # Build stage
-FROM golang:1.23-alpine AS builder
+FROM golang:1.25-alpine AS builder
 
 WORKDIR /app
 
-# Copy go mod files
 COPY go.mod go.sum ./
-RUN GOTOOLCHAIN=auto go mod download
+RUN go mod download
 
-# Copy source code
 COPY . .
 
-# Build the application
-RUN GOTOOLCHAIN=auto CGO_ENABLED=0 GOOS=linux go build -o /app/supa-manager main.go
+RUN CGO_ENABLED=0 GOOS=linux go build -o /app/supadash main.go
 
 # Runtime stage
 FROM alpine:latest
 
-RUN apk --no-cache add ca-certificates words wget docker-cli docker-compose && \
-    ln -s /usr/share/dict/american-english /usr/share/dict/words
+RUN apk --no-cache add ca-certificates wget docker-cli docker-compose curl && \
+    addgroup -S supadash && adduser -S supadash -G supadash
 
-WORKDIR /root/
+WORKDIR /app
 
-# Copy the binary from builder
-COPY --from=builder /app/supa-manager .
+COPY --from=builder /app/supadash .
 COPY --from=builder /app/.env.example .
 COPY --from=builder /app/migrations ./migrations
-# COPY --from=builder /app/templates /app/templates
+COPY --from=builder /app/templates ./templates
 
-# Expose port
 EXPOSE 8080
 
-# Run the application
-CMD ["./supa-manager"]
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+    CMD curl -f http://localhost:8080/v1/health || exit 1
+
+CMD ["./supadash"]
