@@ -1,0 +1,37 @@
+# Binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+supadash
+
+# Test output
+*.log
+*.out
+cover.out
+*.test
+
+# Build artifacts
+build_*.txt
+test_*.txt
+sqlc_*.txt
+push_out.txt
+
+# Environment
+.env
+!.env.example
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Projects data (created at runtime)
+projects/
+backups/

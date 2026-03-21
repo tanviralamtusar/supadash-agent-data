@@ -1,7 +1,0 @@
-?   	supadash	[no test files]
-ok  	supadash/api	0.212s
-?   	supadash/conf	[no test files]
-?   	supadash/database	[no test files]
-?   	supadash/permissions	[no test files]
-ok  	supadash/provisioner	0.553s
-ok  	supadash/utils	0.427s
