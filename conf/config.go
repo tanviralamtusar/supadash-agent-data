@@ -3,7 +3,6 @@ package conf
 import (
 	"github.com/joho/godotenv"
 	"github.com/kelseyhightower/envconfig"
-	"os"
 )
 
 type PostgresSettings struct {
