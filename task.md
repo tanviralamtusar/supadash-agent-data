@@ -26,23 +26,45 @@
 - [x] Patch: Table Editor / SQL Editor
 - [x] Patch: Auth Users, Storage, Edge Functions, Logs
 
-## Phase 4: Resource Manager (NEW page)
-- [ ] Create Resource Manager page
-- [ ] Overview cards (RAM/CPU/Disk gauges)
-- [ ] Per-service breakdown table
-- [ ] Scaling controls (plan selector + sliders)
-- [ ] Usage charts (historical)
-- [ ] Recommendations panel
-- [ ] Server Overview page (admin-only)
+## Phase 4: Resource Manager ✅
+- [x] Create Resource Manager page (`/project/[ref]/resources`)
+- [x] Implement UI components (CPU/RAM Gauges, Service Table, Scaling Sliders)
+- [x] Implement Recommendations and Burst Pool UI
+- [x] Integrate Admin Server Overview page (`/server/resources`)
+- [x] Connect scaling & plan update controls to Go backend
+- [x] Patch Studio sidebar to include "Resources" link
+- [x] Verify API integration and real-time updates
 
-## Phase 5: Team Management
-- [ ] Patch team page for SupaDash API
+## Phase 5: Team Management ✅
+- [x] Patch team page for SupaDash API
+- [x] Implement organization members query hook
+- [x] Implement organization invitation mutation hook
+- [x] Implement organization member role update/delete hooks
+- [x] Update backend `GetOrganizationMembers` query with `gotrue_id`
 
-## Phase 6: Real-time Updates
-- [ ] Add WebSocket endpoints to Go API
-- [ ] Patch Studio for live status updates
 
-## Phase 7: Branding & Polish
-- [ ] Replace logos and favicon
-- [ ] Remove cloud-only UI elements
-- [ ] Final QA pass
+## Phase 6: Real-time Updates ✅
+- [x] Add `gorilla/websocket` to Go backend
+- [x] Implement `WsHub` and `/ws` endpoint in Go API
+- [x] Broadcast project status and container stats via WebSocket
+- [x] Implement `useRealtime` hook in Studio frontend
+- [x] Patch Studio to use real-time updates for project state
+
+## Phase 7: Branding & Polish ✅
+- [x] Update Global Metadata (`_app.tsx`)
+- [x] Update Navigation Branding (`LayoutHeader.tsx`, `HomeIcon.tsx`)
+- [x] Update Auth Page Branding (`SignInLayout.tsx`, `SignInPartner.tsx`, `SignUpForm.tsx`)
+- [x] Update Support & Help Branding (`HelpOptionsList.tsx`, `SupportFormPage.tsx`, `AIAssistantOption.tsx`, `DiscordCTACard.tsx`)
+- [x] Update User Dropdown Branding (`UserDropdown.tsx`)
+- [x] Audit & Brand Core Interface Components
+    - [x] Storage Settings (`StorageSettings.tsx`)
+    - [x] API Settings (`PostgrestConfig.tsx`, `DataApiProjectUrlCard.tsx`)
+    - [x] Database Settings (`SettingsDatabaseEmptyStateLocal.tsx`)
+    - [x] Authentication Settings (`AuthProvidersForm/index.tsx`)
+    - [x] Table Editor Components (`GridHeaderActions.tsx`, `SidePanelEditor.tsx`)
+- [x] Final UI Cleanup
+    - [x] Brand "Getting Started" section (`GettingStarted.tsx`, `GettingStarted.utils.tsx`)
+    - [x] Global "Supabase" text removal (Final pass)
+- [x] Verification & QA
+    - [x] Verify real-time functionality
+    - [x] Verify help/support redirects
