@@ -39,3 +39,13 @@ backups/
 
 # Studio build artifacts
 studio/.build/
+
+# Reference repos (local only, not tracked)
+SupaConsole/
+SupaDash/
+tmp_studio/
+
+# Temp investigation files
+*.txt
+!TASKS.md
+!MUST_NEED.md
